@@ -1,7 +1,21 @@
 import { useState } from "react";
 
 export function Select({ children, onValueChange, value }) {
-  return <div className="w-full">{children}</div>;
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <div onClick={() => setOpen(!open)}>{children.find(c => c.type.name === "SelectTrigger")}</div>
+      {open && (
+        <div className="absolute z-10 bg-white border rounded mt-1 w-full">
+          {children.find(c => c.type.name === "SelectContent").props.children.map(item =>
+            <div key={item.props.value} onClick={() => { onValueChange(item.props.value); setOpen(false); }}>
+              {item}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function SelectTrigger({ children }) {
@@ -9,20 +23,9 @@ export function SelectTrigger({ children }) {
 }
 
 export function SelectContent({ children }) {
-  return <div className="border mt-1 rounded bg-white shadow-md">{children}</div>;
+  return <div>{children}</div>;
 }
 
 export function SelectItem({ children, value }) {
-  return (
-    <div
-      className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-      onClick={() => {
-        const event = { target: { value } };
-        if (typeof value === "function") value(event);
-        else document.dispatchEvent(new CustomEvent("select-item", { detail: value }));
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className="px-3 py-2 hover:bg-gray-100 cursor-pointer">{children}</div>;
 }
