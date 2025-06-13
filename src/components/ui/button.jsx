@@ -1,4 +1,7 @@
-export function Button({ children, onClick, className = "", variant = "default", size = "md" }) {
-  const color = variant === "destructive" ? "bg-red-600" : "bg-blue-600";
-  return <button onClick={onClick} className={`text-white px-4 py-2 rounded ${color} ${className}`}>{children}</button>;
+export function Button({ children, onClick, variant = "default" }) {
+  const styles = {
+    default: "bg-blue-600 text-white px-4 py-2 rounded",
+    destructive: "bg-red-600 text-white px-4 py-2 rounded"
+  };
+  return <button onClick={onClick} className={styles[variant] || styles.default}>{children}</button>;
 }
